@@ -1,0 +1,132 @@
+/**
+ * 模拟管理员输入的面试官列表和候选人列表
+ */
+
+let interview_total_task_data = {
+    taskNumber:'30001',
+    name:'宝洁2019校招二面',
+    admissionCount:'4',
+    // 单场面试时间
+    interviewTime:'30',
+    // 面试地点
+    address:'上海市浦东新区富城路33号香格里拉大酒店20楼会议室201',
+    // 面试官名单
+    interviewerList:[{
+        name:'面试官1',
+        jobNumber:'10001',
+        phone:'18861855098',
+        email:'1476410391@qq.com'
+    },{
+        name:'面试官2',
+        jobNumber:'10002',
+        phone:'18861855098',
+        email:'1476410391@qq.com'
+    },{
+        name:'面试官3',
+        jobNumber:'10003',
+        phone:'18861855098',
+        email:'1476410391@qq.com'
+    }],
+    // 候选人名单
+    candidaterList:[{
+        name:'候选人1',
+        interviewNumber:'20001',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人2',
+        interviewNumber:'20002',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人3',
+        interviewNumber:'20003',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人4',
+        interviewNumber:'20004',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人5',
+        interviewNumber:'20005',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人6',
+        interviewNumber:'20006',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人7',
+        interviewNumber:'20007',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人8',
+        interviewNumber:'20008',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人9',
+        interviewNumber:'20009',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人10',
+        interviewNumber:'20010',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人11',
+        interviewNumber:'20011',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人12',
+        interviewNumber:'20012',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人13',
+        interviewNumber:'20013',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人14',
+        interviewNumber:'20014',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人15',
+        interviewNumber:'20015',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    },{
+        name:'候选人16',
+        interviewNumber:'20016',
+        phone:'18861855098',
+        email:'1476410391@qq.com',
+        resumeUrl:'http://192.168.43.14:8083/images/简历.jpg'
+    }]
+}
+
+module.exports = {
+    INTERVIEW_TOTAL_TASK_DATA:interview_total_task_data,
+}
