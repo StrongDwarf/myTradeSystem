@@ -5,13 +5,29 @@ var fs = require('fs');
  * 写文件,如果没有,就创建
  */
 function addToFile(filePath,str){
-
-
-    fs.writeFile(filePath, str, { 'flag': 'a' }, function(err) {
-        if (err) {
-            console.log(err);
+    fs.exists(filePath,(exists) => {
+        if(!exists){
+            let arrTmp = filePath.split("\\")
+            arrTmp.pop()
+            let fsMk = arrTmp.join("\\")
+            fs.mkdir(fsMk,(err) => {
+                if(err){
+                    return console.error(err);
+                }
+                fs.writeFile(filePath, str, { 'flag': 'a' }, function(err) {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+            })
+        }else{
+            fs.writeFile(filePath, str, { 'flag': 'a' }, function(err) {
+                if (err) {
+                    console.log(err);
+                }
+            });
         }
-    });
+    })
 }
 
 /**

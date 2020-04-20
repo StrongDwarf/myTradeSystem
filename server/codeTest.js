@@ -32,17 +32,17 @@ function getHistoryData(symbol, scale, ma, datelen) {
 }
 
 /**
- * 获取连续3天都是跌的股票代码
+ * 获取连续3天都是跌的代码
  */
 async function getThreeDropCode() {
-    console.log("开始获取连跌3天的股票代码")
-    // 连跌3天的股票代码
+    console.log("开始获取连跌3天的代码")
+    // 连跌3天的代码
     let dropThreeCodeObj = {
         shCodeList: [],
         szCodeList: [],
         cybCodeList: []
     }
-    // 连续缩量3天的股票代码
+    // 连续缩量3天的代码
     let volumnReduceObj = {
         shCodeList: [],
         szCodeList: [],
@@ -56,7 +56,7 @@ async function getThreeDropCode() {
             for(let i=0;i<componentData.shComponentCodeList.length;i++){
                 for(let j=0;j<codeList.length;j++){
                     if(componentData.shComponentCodeList[i]==codeList[j]){
-                        console.log("股票代码为" + componentData.shComponentCodeList[i] + "的股票,已经校验过,不需重复校验")
+                        console.log("代码为" + componentData.shComponentCodeList[i] + "的,已经校验过,不需重复校验")
                         componentData.shComponentCodeList.splice(i,1)
                         i--;
                         j--;
@@ -79,7 +79,7 @@ async function getThreeDropCode() {
             componentData.shComponentCodeList.forEach((code1, index) => {
                 codeList.forEach(code2 => {
                     if (code1 == code2) {
-                        console.log("股票代码为" + code1 + "的股票,已经校验过,不需重复校验")
+                        console.log("代码为" + code1 + "的,已经校验过,不需重复校验")
                         componentData.shComponentCodeList.splice(index, 1)
                     }
                 })
@@ -88,7 +88,7 @@ async function getThreeDropCode() {
             componentData.szComponentCodeList.forEach((code1, index) => {
                 codeList.forEach(code2 => {
                     if (code1 == code2) {
-                        console.log("股票代码为" + code1 + "的股票,已经校验过,不需重复校验")
+                        console.log("代码为" + code1 + "的,已经校验过,不需重复校验")
                         componentData.szComponentCodeList.splice(index, 1)
                     }
                 })
@@ -99,7 +99,7 @@ async function getThreeDropCode() {
     }).then(data => {
         var task = []
 
-        console.log("开始校验上证股票")
+        console.log("开始校验上证")
         componentData.shComponentCodeList.forEach((companyCode) => {
 
             task.push(callback => {
@@ -139,11 +139,11 @@ async function getThreeDropCode() {
         })
 
         task.push(callback => {
-            console.log("上证股票校验完毕,上证中连跌3天的股票代码为-->" + JSON.stringify(dropThreeCodeObj.shCodeList))
-            console.log("上证股票校验完毕,上证中缩量3天的股票代码为-->" + JSON.stringify(volumnReduceObj.shCodeList))
-            console.log("上证股票中连续缩量下跌3天的股票代码为-->" + JSON.stringify(getInnerArray(volumnReduceObj.shCodeList, dropThreeCodeObj.shCodeList)))
+            console.log("上证校验完毕,上证中连跌3天的代码为-->" + JSON.stringify(dropThreeCodeObj.shCodeList))
+            console.log("上证校验完毕,上证中缩量3天的代码为-->" + JSON.stringify(volumnReduceObj.shCodeList))
+            console.log("上证中连续缩量下跌3天的代码为-->" + JSON.stringify(getInnerArray(volumnReduceObj.shCodeList, dropThreeCodeObj.shCodeList)))
 
-            console.log("开始校验深圳股票")
+            console.log("开始校验深圳")
             callback(null)
         })
 
@@ -200,7 +200,7 @@ async function getThreeDropCode() {
  */
 function isDropThreeDay(dataList) {
     if (!dataList || dataList.length != 13) {
-        console.log("当前股票数据异常")
+        console.log("当前数据异常")
         console.log("异常数据" + dataList)
         return false
     }
@@ -235,7 +235,7 @@ function isDropThreeDay(dataList) {
  */
 function isVolumnReduce(dataList) {
     if (!dataList || dataList.length != 13) {
-        console.log("当前股票数据异常")
+        console.log("当前数据异常")
         console.log("异常数据" + dataList)
         return false
     }
@@ -308,7 +308,7 @@ function readFormFile(fileName) {
 }
 
 /**
- * 获取已经校验了的股票代码
+ * 获取已经校验了的代码
  */
 function getDoCompanyCodeList() {
     let rootPath = fsUtil.getRootPath()
@@ -324,7 +324,7 @@ function getDoCompanyCodeList() {
 }
 
 /**
- * 写入已经校验了的股票代码
+ * 写入已经校验了的代码
  */
 function addToDoCompanyCodeList(companyCode) {
     let rootPath = fsUtil.getRootPath()
@@ -333,7 +333,7 @@ function addToDoCompanyCodeList(companyCode) {
 }
 
 /**
- * 写入连跌3天的股票代码
+ * 写入连跌3天的代码
  */
 function addToDropThreeDayCodeList(companyCode) {
     let rootPath = fsUtil.getRootPath()
@@ -342,7 +342,7 @@ function addToDropThreeDayCodeList(companyCode) {
 }
 
 /**
- * 写入缩量3天的股票代码
+ * 写入缩量3天的代码
  */
 function addToVolumnReduceCodeList(companyCode) {
     let rootPath = fsUtil.getRootPath()
@@ -351,7 +351,7 @@ function addToVolumnReduceCodeList(companyCode) {
 }
 
 /**
- * 写入缩量3天并且连跌3天的股票代码
+ * 写入缩量3天并且连跌3天的代码
  */
 function addToDropAndReduceCodeList(companyCode) {
     let rootPath = fsUtil.getRootPath()
