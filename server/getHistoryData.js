@@ -51,7 +51,7 @@ async function getHistoryData() {
                     dataStoreUtil.addToDoCompanyCodeList(companyCode)
                     
                     console.log("将数据存储到文件系统中")
-                    dataStoreUtil.storeData("sh" + companyCode,dataList)
+                    dataStoreUtil.storeHistoryData("sh" + companyCode,dataList)
 
                     setTimeout(function () {
                         callback(null)
@@ -70,7 +70,7 @@ async function getHistoryData() {
                     dataStoreUtil.addToDoCompanyCodeList(companyCode)
 
                     console.log("将数据存储到文件系统中")
-                    dataStoreUtil.storeData("sz" + companyCode,dataList)
+                    dataStoreUtil.storeHistoryData("sz" + companyCode,dataList)
 
                     setTimeout(function () {
                         callback(null)

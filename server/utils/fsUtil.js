@@ -37,7 +37,7 @@ function readFormFile(filePath){
     return new Promise(resolve => {
         fs.readFile(filePath, 'utf-8', function(err, data) {
             if (err) {
-                throw err;
+                resolve("")
             }
             resolve(data);
         });

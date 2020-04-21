@@ -7,6 +7,8 @@ var dateUtil = require('./dateUtil')
 const dayDataFileName = "dayTradeData.txt"
 const nowDataFileName = "nowTradeData.txt"
 const doCompanyFileName = "doCompanyCode.txt"
+const doNowDataFileName = "doNowData.txt"
+const resultFileName = "result.txt"
 
 /**
  * 添加到每日数据中
@@ -17,6 +19,22 @@ function addToDayTradeData(companyCode,data){
     let str = companyCode + ":" + data.open + "," + data.close + "," + data.high + "," + data.low + "," + data.volumn + ";\n"
     fsUtil.addToFile(filePath, str)
 }
+
+/**
+ * 添加到每日结果中
+ */
+function addTodayResult(codeList){
+    let str = dateUtil.getNowDateHHMMSS() + ": "
+    codeList.forEach(code => {
+        str += code +  ","
+    })
+    str += "\n"
+
+    let rootPath = fsUtil.getRootPath()
+    let filePath = rootPath + "\\data\\dayData\\" + dateUtil.getNowDateYYYYMMDD() + "\\" + resultFileName
+    fsUtil.addToFile(filePath, str)
+}
+
 
 /**
  * 添加到实时的数据中
@@ -101,7 +119,7 @@ function getDataByDay(day,isNow){
  * @param {*} companyCode 代码
  * @param {*} dataList 数据列表
  */
-function storeData(companyCode,dataList){
+function storeHistoryData(companyCode,dataList){
     // 将dataList根据年月日区分开
     
     // 整理日期格式
@@ -173,6 +191,19 @@ function storeData(companyCode,dataList){
 }
 
 /**
+ * 存储实时数据
+ */
+function storeNowData(dataList){
+    let str = ""
+    dataList.forEach(nowData => {
+        str += nowData.code + ":" + nowData.open + "," + nowData.close + "," + nowData.high + "," + nowData.low + "," + nowData.volume + ";\n"
+    })
+
+    let filePath = fsUtil.getRootPath() + "\\data\\dayData\\" + dateUtil.getNowDateYYYYMMDD() + "\\" + nowDataFileName
+    fsUtil.addToFile(filePath, str)
+}
+
+/**
  * 获取已经校验了的代码
  */
 function getDoCompanyCodeList() {
@@ -188,6 +219,38 @@ function getDoCompanyCodeList() {
     })
 }
 
+/**
+ * 写入已经获取了实时数据的代码
+ */
+function addToDoNowDataCodeList(codeList) {
+    let str = ""
+    codeList.forEach(code => {
+        str += code+","
+    })
+
+    let rootPath = fsUtil.getRootPath()
+    let doNowDataFilePath = rootPath + "\\data\\dayData\\" + dateUtil.getNowDateYYYYMMDD() + "\\" + doNowDataFileName
+    fsUtil.addToFile(doNowDataFilePath, str)
+}
+
+function getDoNowDataCodeList() {
+    let rootPath = fsUtil.getRootPath()
+    let doNowDataFilePath = rootPath + "\\data\\dayData\\" + dateUtil.getNowDateYYYYMMDD() + "\\" + doNowDataFileName
+    return new Promise(resolve => {
+        fsUtil.readFormFile(doNowDataFilePath).then(str => {
+            str = str.replace(/\ +/g, "").replace(/[\r\n]/g, "")
+            let codeList = str.split(",")
+            codeList = [...new Set(codeList)]
+            resolve(codeList)
+        })
+    })
+}
+
+/**
+ * 获取已经获取了实时数据的代码
+ */
+
+
 module.exports = {
     // 写入已经校验了的代码
     addToDoCompanyCodeList,
@@ -197,7 +260,15 @@ module.exports = {
     getDataByDay,
     // 添加到实时数据中
     addToNewTradeData,
-    storeData,
-    getDoCompanyCodeList
+    // 存储数据
+    storeHistoryData,
+    // 获取已经获取了历史数据的代码列表
+    getDoCompanyCodeList,
+    // 添加到已经获取了实时数据的列表中
+    addToDoNowDataCodeList,
+    // 获取已经获取了实时数据的代码列表
+    getDoNowDataCodeList,
+    storeNowData,
+    addTodayResult
 }
 

@@ -32,7 +32,7 @@ function getHistoryData(symbol, scale, ma, datelen) {
  * 使用HTTP获取实时数据
  */
 function getNowData(codeList){
-    console.log("开始获取实时数据,代码列表-->" + codeList)
+    console.log("开始获取实时数据")
     let url = "http://hq.sinajs.cn/list="
     let codeStr = ""
     

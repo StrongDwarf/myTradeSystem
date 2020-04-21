@@ -18,6 +18,7 @@ function getNowDataFormStr(str){
     str = str.replace(/\"/g,"")
     
     let dataStrList = str.split(";")
+    console.log("dataStrList.length",dataStrList.length)
     dataStrList.forEach(dataStr => {
         let dataItem = {
             code:null,
@@ -36,7 +37,7 @@ function getNowDataFormStr(str){
         if(arr.length == 2){
             dataItem.code = arr[0]
             let dataListTmp = arr[1].split(",")
-            if(dataListTmp.length == 34){
+            if(dataListTmp.length > 10){
                 dataItem.name = dataListTmp[0]
                 dataItem.toDayOpen = dataListTmp[1]
                 dataItem.yesterdayClose = dataListTmp[2]
@@ -50,6 +51,7 @@ function getNowDataFormStr(str){
             }
         }
     })
+    console.log("nowDataList.length",nowDataList.length)
 
     return nowDataList
 }

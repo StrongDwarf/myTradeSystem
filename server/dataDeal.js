@@ -14,15 +14,15 @@ function main(){
     let options = {
         dayNumber:3,        // 要校验的天数
         rate:0.4,             // 缩量比例,为0表示不校验缩量比例
-        checkDorp:false,     // 校验下跌
+        checkDorp:true,     // 校验下跌
         checkReduce:true,   // 校验缩量
         checkShade:true,    // 校验阴线
-        checkReduceRate:false,// 校验缩量比例
-        isUseNowData:false,     // 是否使用实时数据
-        nowDataVolumeRate:1,   // 实时数据交易量转换比例
-        lowest:-1,              // 最低价,设置最低价时,将除去价格低于最低价的代码
-        useBlackCodeList:false, // 是否使用黑名单, 使用黑名单后,将清除在黑名单中的代码
-        isStoreToFileSys:false, // 是否保存到文件系统中 设置保存到文件系统中后,将将合格的代码保存到文件系统中
+        checkReduceRate:true,// 校验缩量比例
+        isUseNowData:true,     // 是否使用实时数据
+        nowDataVolumeRate:1,   // 今日数据交易量转换比例
+        lowestPrice:4,              // 最低价,设置最低价时,将除去价格低于最低价的代码
+        useBlackCodeList:true, // 是否使用黑名单, 使用黑名单后,将清除在黑名单中的代码
+        isStoreToFileSys:true, // 是否保存到文件系统中 设置保存到文件系统中后,将将合格的代码保存到文件系统中
     }
 
     let workDayList = dateUtil.getWorkDayList(options.dayNumber + 1),     // 工作日列表
@@ -35,12 +35,28 @@ function main(){
         reduceRateList = [],
         resultCodeList = []
 
+    // 使用实时数据
+    if(options.isUseNowData){
+        console.log("使用实时数据")
+        let todayStr = workDayList.shift()
+        task.push(callback => {
+            dataStoreUtil.getDataByDay(todayStr,true).then(codeDataList => {
+                // 实时数据交易量修正
+                codeDataList.forEach(codeData => {
+                    codeData.volume = codeData.volume*options.nowDataVolumeRate
+                })
+
+                workDayDataList.push(codeDataList)
+                callback(null)
+            }).catch(err => {
+                console.error(err)
+            })
+        })
+    }
+
     workDayList.forEach(workDay => {
         task.push(callback => {
-            console.log("开始获取"+workDay+"数据")
             dataStoreUtil.getDataByDay(workDay).then(codeDataList => {
-                console.log("成功获取" + workDay + "数据")
-                console.log(workDay + "数据的长度为" + codeDataList.length)
                 workDayDataList.push(codeDataList)
                 callback(null)
             }).catch(err => {
@@ -61,46 +77,30 @@ function main(){
         for(let code in codeDataObj){
             num ++
         }
-        console.log("转换后的数据长度为" + num)
 
-        console.log("开始筛查连续下跌" + options.dayNumber + "天的数据")
         for(let code in codeDataObj){
             if(checkUtil.isAwayDrop(codeDataObj[code],options.dayNumber)){
                 dorpCodeList.push(code)
             }
         }
-        console.log("筛查成功")
 
-        console.log("开始筛查连续缩量" + options.dayNumber + "天的数据")
         for(let code in codeDataObj){
             if(checkUtil.isAwayReduce(codeDataObj[code],options.dayNumber)){
                 reduceCodeList.push(code)
             }
         }
-        console.log("筛查成功")
 
-        console.log("开始筛查连续阴线" + options.dayNumber + "天的数据")
         for(let code in codeDataObj){
             if(checkUtil.isAwayShade(codeDataObj[code],options.dayNumber)){
                 shadeCodeList.push(code)
             }
         }
-        console.log("筛查成功")
-
-        console.log("开始筛查按比例缩量" + options.dayNumber + "天的数据")
         for(let code in codeDataObj){
             if(checkUtil.isReduceRate(codeDataObj[code],options.dayNumber,options.rate)){
                 reduceRateList.push(code)
             }
         }
-        console.log("筛查成功")
 
-        console.log("连续下跌" + options.dayNumber + "天的数据集为",dorpCodeList)
-        console.log("连续缩量" + options.dayNumber + "天的数据集为",reduceCodeList)
-        console.log("连续阴线" + options.dayNumber + "天的数据集为",shadeCodeList)
-        console.log("比例缩量" + options.dayNumber + "天的数据集为",reduceRateList)
-
-        console.log("开始根据条件合并数据")
         if(options.checkDorp){
             if(dorpCodeList.length == 0){
                 resultCodeList = []
@@ -149,9 +149,26 @@ function main(){
             }
         }
 
+        // 是否使用黑名单
+        if(options.useBlackCodeList){
+            arrayUtil.fliterInArr2(resultCodeList,componentData.blackComponentCodeList)
+        }
 
+        // 是否剔除低价
+        if(options.lowestPrice > -1){
+            let lowestCodeList = []
+            for(let code in codeDataObj){
+                if(Number(codeDataObj[code][0].close) > options.lowestPrice){
+                    lowestCodeList.push(code)
+                }
+            }
+            resultCodeList = arrayUtil.getInnerArray(resultCodeList,lowestCodeList)
+        }
 
-        console.log("数据合并完成,合并后的数据为",resultCodeList)
+        console.log("符合条件的数据集为",resultCodeList)
+        if(options.isStoreToFileSys){
+            dataStoreUtil.addTodayResult(resultCodeList)
+        }
     })
 }
 

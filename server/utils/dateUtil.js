@@ -9,6 +9,10 @@ function getNowDateYYYYMMDD() {
     return "" + year + month + day
 }
 
+function getNowDateHHMMSS(){
+    return ((new Date()) + "").slice(16,24)
+}
+
 /**
  * 获取最近n天的工作日列表:从最近到最远
  */
@@ -19,5 +23,6 @@ function getWorkDayList(n){
 
 module.exports = {
     getNowDateYYYYMMDD,
-    getWorkDayList
+    getWorkDayList,
+    getNowDateHHMMSS
 }
