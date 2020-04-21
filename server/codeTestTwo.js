@@ -13,7 +13,7 @@ var fsUtil = require('./utils/fsUtil')
 function getHistoryData(symbol, scale, ma, datelen) {
     
     console.log("开始获取历史数据,编号-->" + symbol)
-    return new Promise(resolve => {
+    return new Promise((resolve,reject) => {
         // symbol=sz002681&scale=60&ma=5&datalen=1023
         let url = "http://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData" +
             "?symbol=" + symbol + "&scale=" + scale + "&ma=" + ma + "&datalen=" + datelen
@@ -27,6 +27,8 @@ function getHistoryData(symbol, scale, ma, datelen) {
                 console.log("获取历史数据成功,编号-->" + symbol)
                 resolve(eval(data))
             })
+        }).on('error',(e) => {
+            console.log("获取数据失败",e.message)
         })
     })
 }

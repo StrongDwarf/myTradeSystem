@@ -122,9 +122,9 @@ function getWorkDayList(n){
 function main(){
     let options = {
         dayNumber:3,        // 要校验的天数
-        rate:0.5,             // 缩量比例,为0表示不校验缩量比例
+        rate:0.4,             // 缩量比例,为0表示不校验缩量比例
         checkDorp:false,     // 校验下跌
-        checkReduce:false,   // 校验缩量
+        checkReduce:true,   // 校验缩量
         checkShade:true,    // 校验阴线
         checkReduceRate:true// 校验缩量比例
     }
