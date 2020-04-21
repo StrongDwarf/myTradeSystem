@@ -20,7 +20,9 @@ function main(){
         checkReduceRate:false,// 校验缩量比例
         isUseNowData:false,     // 是否使用实时数据
         nowDataVolumeRate:1,   // 实时数据交易量转换比例
-
+        lowest:-1,              // 最低价,设置最低价时,将除去价格低于最低价的代码
+        useBlackCodeList:false, // 是否使用黑名单, 使用黑名单后,将清除在黑名单中的代码
+        isStoreToFileSys:false, // 是否保存到文件系统中 设置保存到文件系统中后,将将合格的代码保存到文件系统中
     }
 
     let workDayList = dateUtil.getWorkDayList(options.dayNumber + 1),     // 工作日列表
@@ -146,6 +148,8 @@ function main(){
                 }
             }
         }
+
+
 
         console.log("数据合并完成,合并后的数据为",resultCodeList)
     })
