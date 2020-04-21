@@ -4,6 +4,7 @@ var async = require("async")
 var fs = require('fs');
 var path = require("path");
 var fsUtil = require('./utils/fsUtil')
+var dataStoreUtil = require('./utils/dataStoreUtil')
 
 
 /**
@@ -107,7 +108,7 @@ async function getThreeDropCode() {
             task.push(callback => {
                 getHistoryData("sh" + companyCode, "60", "5", "13").then(dataList => {
                     // 加入doCompanyCode,防止重复获取
-                    addToDoCompanyCodeList(companyCode)
+                    dataStoreUtil.addToDoCompanyCodeList(companyCode)
 
                     console.log("判断是否连跌3天")
                     if (isDropThreeDay(dataList)) {
@@ -154,7 +155,7 @@ async function getThreeDropCode() {
             task.push(callback => {
                 getHistoryData("sz" + companyCode, "60", "5", "13").then(dataList => {
                     // 加入doCompanyCode,防止重复获取
-                    addToDoCompanyCodeList(companyCode)
+                    dataStoreUtil.addToDoCompanyCodeList(companyCode)
 
                     console.log("判断是否连跌3天")
                     if (isDropThreeDay(dataList)) {
@@ -310,43 +311,6 @@ function addToDoCompanyCodeList(companyCode) {
 }
 
 /**
- * 写入连跌3天的代码
- */
-function addToDropThreeDayCodeList(companyCode) {
-    let rootPath = fsUtil.getRootPath()
-    let doCompanyCodeFilePath = rootPath + "\\data\\dayData\\" + getNowDateYYYYMMDD() + "\\dropThreeDayCode.txt"
-    fsUtil.addToFile(doCompanyCodeFilePath, companyCode + ",")
-}
-
-/**
- * 写入缩量3天的代码
- */
-function addToVolumnReduceCodeList(companyCode) {
-    let rootPath = fsUtil.getRootPath()
-    let doCompanyCodeFilePath = rootPath + "\\data\\dayData\\" + getNowDateYYYYMMDD() + "\\volumnReduce.txt"
-    fsUtil.addToFile(doCompanyCodeFilePath, companyCode + ",")
-}
-
-/**
- * 写入缩量3天并且连跌3天的代码
- */
-function addToDropAndReduceCodeList(companyCode) {
-    let rootPath = fsUtil.getRootPath()
-    let doCompanyCodeFilePath = rootPath + "\\data\\dayData\\" + getNowDateYYYYMMDD() + "\\dropAndReduce.txt"
-    fsUtil.addToFile(doCompanyCodeFilePath, companyCode + ",")
-}
-
-/**
- * 添加到每日数据中
- */
-function addToDayTradeData(companyCode,data){
-    let rootPath = fsUtil.getRootPath()
-    let filePath = rootPath + "\\data\\dayData\\" + data.day + "\\dayTradeData.txt"
-    let str = companyCode + ":" + data.open + "," + data.close + "," + data.high + "," + data.low + "," + data.volumn + ";\n"
-    fsUtil.addToFile(filePath, str)
-}
-
-/**
  * 获取今天的日期
  */
 function getNowDateYYYYMMDD() {
@@ -439,7 +403,7 @@ function storeData(companyCode,dataList){
 
     newDataList.forEach(newData => {
         if(newData.volumnList.length == 4){
-            addToDayTradeData(companyCode,newData)
+            dataStoreUtil.addToDayTradeData(companyCode,newData)
         }
     })
     
@@ -488,7 +452,7 @@ async function getDataFromNetWork() {
             task.push(callback => {
                 getHistoryData("sh" + companyCode, "60", "5", "1024").then(dataList => {
                     // 加入doCompanyCode,防止重复获取
-                    addToDoCompanyCodeList(companyCode)
+                    dataStoreUtil.addToDoCompanyCodeList(companyCode)
                     
                     console.log("将数据存储到文件系统中")
                     storeData("sh" + companyCode,dataList)
@@ -507,7 +471,7 @@ async function getDataFromNetWork() {
             task.push(callback => {
                 getHistoryData("sz" + companyCode, "60", "5", "1024").then(dataList => {
                     // 加入doCompanyCode,防止重复获取
-                    addToDoCompanyCodeList(companyCode)
+                    dataStoreUtil.addToDoCompanyCodeList(companyCode)
 
                     console.log("将数据存储到文件系统中")
                     storeData("sz" + companyCode,dataList)
