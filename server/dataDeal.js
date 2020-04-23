@@ -9,20 +9,24 @@ var arrayUtil = require('./utils/arrayUtil')
 var dataTranUtil = require("./utils/dataTranUtil")
 var dateUtil = require("./utils/dateUtil")
 var dataStoreUtil = require("./utils/dataStoreUtil")
+var getNowData = require("./getNowData")
+var getNowMoneyFlow = require("./getNowMoneyFlow")
 
-function main(){
+
+function dataDeal(){
     let options = {
         dayNumber:3,        // 要校验的天数
-        rate:0.4,             // 缩量比例,为0表示不校验缩量比例
+        rate:0.3,             // 缩量比例,为0表示不校验缩量比例
         checkDorp:true,     // 校验下跌
         checkReduce:true,   // 校验缩量
-        checkShade:true,    // 校验阴线
+        checkShade:false,    // 校验阴线
         checkReduceRate:true,// 校验缩量比例
         isUseNowData:true,     // 是否使用实时数据
         nowDataVolumeRate:1,   // 今日数据交易量转换比例
-        lowestPrice:4,              // 最低价,设置最低价时,将除去价格低于最低价的代码
+        lowestPrice:8,              // 最低价,设置最低价时,将除去价格低于最低价的代码
         useBlackCodeList:true, // 是否使用黑名单, 使用黑名单后,将清除在黑名单中的代码
         isStoreToFileSys:true, // 是否保存到文件系统中 设置保存到文件系统中后,将将合格的代码保存到文件系统中
+        isMainIn:true,          // 是否筛选主力资金流入
     }
 
     let workDayList = dateUtil.getWorkDayList(options.dayNumber + 1),     // 工作日列表
@@ -164,12 +168,68 @@ function main(){
             }
             resultCodeList = arrayUtil.getInnerArray(resultCodeList,lowestCodeList)
         }
+        console.log("筛选主力流动之前的数据集为",resultCodeList)
 
-        console.log("符合条件的数据集为",resultCodeList)
-        if(options.isStoreToFileSys){
-            dataStoreUtil.addTodayResult(resultCodeList)
+        if(options.isMainIn){
+            getTodayMainIn().then(mainInList => {
+                resultCodeList = arrayUtil.getInnerArray(resultCodeList,mainInList)
+
+                console.log("符合条件的数据集为",resultCodeList)
+                if(options.isStoreToFileSys){
+                    dataStoreUtil.addTodayResult(resultCodeList)
+                }
+            })
+        }else{
+            console.log("符合条件的数据集为",resultCodeList)
+            if(options.isStoreToFileSys){
+                dataStoreUtil.addTodayResult(resultCodeList)
+            }
         }
+
+        
+
+
     })
 }
 
-main()
+/**
+ * 资金流动相关处理操作
+ */
+function getTodayMainIn(){
+    return new Promise((resolve,reject) => {
+        let task = []
+        let resultCode = []
+
+        dataStoreUtil.getQQMoneyDataByDay(dateUtil.getNowDateYYYYMMDD()).then(codeDataList => {
+                
+            // 数据处理
+            codeDataList.forEach(codeData => {
+                if(codeData.mainClearIn > 0){
+                    resultCode.push(codeData.code)
+                }
+            })
+
+            console.log("主力资金流入数为" + resultCode.length + "  第一个为" + resultCode[0])
+            resolve(resultCode)
+        }).catch(err => {
+            console.error(err)
+        })
+    })
+}
+
+
+
+function main(){
+    // 文件初始化
+    dataStoreUtil.fsInit()
+
+    // 数据初始化
+    getNowData.getNowData()
+    getNowMoneyFlow.getQQMoneyData()
+
+    // 数据处理
+}
+
+
+// main()
+dataDeal()

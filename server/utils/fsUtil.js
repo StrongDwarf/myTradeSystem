@@ -30,6 +30,31 @@ function addToFile(filePath,str){
     })
 }
 
+function writeToFile(filePath,str){
+    fs.writeFile(filePath, str, { 'flag': 'w' }, function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
+}
+
+/**
+ * 清空文件
+ */
+function clearFile(filePath){
+    console.log("开始清除文件内容,filePath--->" + filePath)
+    return new Promise((resolve,reject) => {
+        fs.writeFile(filePath, "", { 'flag': 'w' }, function(err) {
+            if (err) {
+                console.log("清除文件内容失败",err);
+                reject(err)
+            }
+            console.log("清除文件内容成功")
+            resolve()
+        });
+    })
+}
+
 /**
  * 从文件中读
  */
@@ -45,6 +70,17 @@ function readFormFile(filePath){
 }
 
 /**
+ * 创建目录
+ */
+function createFileMk(fsMk){
+    return new Promise((resolve,reject) => {
+        fs.mkdir(fsMk,(err) => {
+            resolve()
+        })
+    })
+}
+
+/**
  * 获取当前路径
  */
 function getRootPath(){
@@ -55,5 +91,8 @@ function getRootPath(){
 module.exports = {
     addToFile,
     readFormFile,
-    getRootPath
+    getRootPath,
+    clearFile,
+    createFileMk,
+    writeToFile
 }

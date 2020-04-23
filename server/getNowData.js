@@ -82,4 +82,6 @@ async function getNowData() {
     })
 }
 
-getNowData()
+module.exports = {
+    getNowData
+}

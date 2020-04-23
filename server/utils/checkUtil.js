@@ -67,9 +67,27 @@ function isReduceRate(dataList,n,rate){
     return false
 }
 
+/**
+ * 判断是否是主力流入大于流出
+ */
+function isMainIn(dataObj){
+    if(!dataObj){
+        return false
+    }
+    let mainIn = Number(dataObj.r0_in) + Number(dataObj.r1_in),
+        mainout = Number(dataObj.r0_out) + Number(dataObj.r1_out)
+    
+    if(mainIn > mainout){
+        return true
+    }
+    
+    return false
+}
+
 module.exports = {
     isAwayDrop,
     isAwayShade,
     isAwayReduce,
-    isReduceRate
+    isReduceRate,
+    isMainIn
 }
