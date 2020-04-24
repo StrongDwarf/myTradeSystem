@@ -13,21 +13,8 @@ var getNowData = require("./getNowData")
 var getNowMoneyFlow = require("./getNowMoneyFlow")
 
 
-function dataDeal(){
-    let options = {
-        dayNumber:3,        // 要校验的天数
-        rate:0.3,             // 缩量比例,为0表示不校验缩量比例
-        checkDorp:true,     // 校验下跌
-        checkReduce:true,   // 校验缩量
-        checkShade:false,    // 校验阴线
-        checkReduceRate:true,// 校验缩量比例
-        isUseNowData:true,     // 是否使用实时数据
-        nowDataVolumeRate:1,   // 今日数据交易量转换比例
-        lowestPrice:8,              // 最低价,设置最低价时,将除去价格低于最低价的代码
-        useBlackCodeList:true, // 是否使用黑名单, 使用黑名单后,将清除在黑名单中的代码
-        isStoreToFileSys:true, // 是否保存到文件系统中 设置保存到文件系统中后,将将合格的代码保存到文件系统中
-        isMainIn:true,          // 是否筛选主力资金流入
-    }
+function dataDeal(options){
+    
 
     let workDayList = dateUtil.getWorkDayList(options.dayNumber + 1),     // 工作日列表
         task = [],               // 任务数组
@@ -231,5 +218,19 @@ function main(){
 }
 
 
+let options = {
+    dayNumber:3,        // 要校验的天数
+    rate:0.3,             // 缩量比例,为0表示不校验缩量比例
+    checkDorp:false,     // 校验下跌
+    checkReduce:true,   // 校验缩量
+    checkShade:true,    // 校验阴线
+    checkReduceRate:false,// 校验缩量比例
+    isUseNowData:true,     // 是否使用实时数据
+    nowDataVolumeRate:1,   // 今日数据交易量转换比例
+    lowestPrice:8,              // 最低价,设置最低价时,将除去价格低于最低价的代码
+    useBlackCodeList:true, // 是否使用黑名单, 使用黑名单后,将清除在黑名单中的代码
+    isStoreToFileSys:true, // 是否保存到文件系统中 设置保存到文件系统中后,将将合格的代码保存到文件系统中
+    isMainIn:true,          // 是否筛选主力资金流入
+}
 // main()
-dataDeal()
+dataDeal(options)
