@@ -15,7 +15,7 @@ var getNowMoneyFlow = require("./getNowMoneyFlow")
 
 function dataDeal(){
     let options = {
-        dayNumber:4,        // 要校验的天数
+        dayNumber:5,        // 要校验的天数
         rate:0.5,             // 缩量比例,为0表示不校验缩量比例
         checkDorp:false,     // 校验下跌
         checkReduce:true,   // 校验缩量
@@ -231,5 +231,5 @@ function main(){
 }
 
 
-//main()
- dataDeal()
+main()
+// dataDeal()
